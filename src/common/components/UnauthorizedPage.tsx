@@ -1,5 +1,5 @@
-function UnauthorizedPage() {
+const UnauthorizedPage = () => {
   return <div>UnauthorizedPage</div>;
-}
+};
 
 export default UnauthorizedPage;

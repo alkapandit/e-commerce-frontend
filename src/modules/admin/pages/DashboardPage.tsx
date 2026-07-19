@@ -1,4 +1,4 @@
-function DashboardPage() {
+const DashboardPage = () => {
   return (
     <div className="mx-auto max-w-7xl px-6 py-10">
       <h1 className="text-xl font-semibold text-slate-900">Dashboard</h1>
@@ -7,4 +7,4 @@ function DashboardPage() {
   )
 }
 
-export { DashboardPage }
+export default DashboardPage

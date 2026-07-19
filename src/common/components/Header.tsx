@@ -1,6 +1,6 @@
 import { MapPin, Search, ShoppingCart, Sparkles, User } from "lucide-react";
 
-function Header() {
+const Header = () => {
   return (
     <header className="w-full border-b border-border bg-white">
       <div className="mx-auto flex h-20 max-w-7xl items-center gap-6 px-6">
@@ -68,6 +68,6 @@ function Header() {
       </div>
     </header>
   );
-}
+};
 
-export { Header };
+export default Header;

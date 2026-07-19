@@ -1,13 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import { LoginPage } from "@/auth/pages/LoginPage";
-import { AuthLayout } from "@/layouts/AuthLayout";
-import { MainLayout } from "@/layouts/MainLayout";
-import { DashboardPage } from "@/modules/admin/pages/DashboardPage";
-import { UsersPage } from "@/modules/users/pages/UsersPage";
-import UnauthorizedPage from "../auth/pages/UnauthorizedPage";
+import LoginPage from "@/auth/pages/LoginPage";
+import AuthLayout from "@/layouts/AuthLayout";
+import MainLayout from "@/layouts/MainLayout";
+import DashboardPage from "@/modules/admin/pages/DashboardPage";
+import UsersPage from "@/modules/users/pages/UsersPage";
+import UnauthorizedPage from "../common/components/UnauthorizedPage";
 import NotFoundPage from "../common/components/NotFoundPage";
 import Home from "@/modules/home/pages/Home";
+import RegisterPage from "@/auth/pages/RegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/register",
-        element: <LoginPage />,
+        element: <RegisterPage />,
       },
     ],
   },
