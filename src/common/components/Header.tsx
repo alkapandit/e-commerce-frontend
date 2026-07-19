@@ -1,4 +1,5 @@
 import { MapPin, Search, ShoppingCart, Sparkles, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -61,10 +62,10 @@ const Header = () => {
         </button>
 
         {/* Sign in */}
-        <button type="button" className="flex shrink-0 items-center gap-2">
+        <Link to="/login" className="flex shrink-0 items-center gap-2">
           <User className="size-6 text-slate-700" />
           <span className="text-sm font-medium text-slate-700">Sign In</span>
-        </button>
+        </Link>
       </div>
     </header>
   );
