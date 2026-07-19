@@ -1,7 +1,18 @@
 import { MapPin, Search, ShoppingCart, Sparkles, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import { useCurrentLocation } from "@/hooks/use-current-location";
+
 const Header = () => {
+  const { status, locality, detect } = useCurrentLocation();
+
+  const deliveryLabel =
+    status === "loading"
+      ? "Detecting location..."
+      : locality
+        ? `Delivering to ${locality}`
+        : "Delivering to Dubai";
+
   return (
     <header className="w-full border-b border-border bg-white">
       <div className="mx-auto flex h-20 max-w-7xl items-center gap-6 px-6">
@@ -38,14 +49,15 @@ const Header = () => {
         {/* Delivery location */}
         <button
           type="button"
+          onClick={detect}
           className="flex shrink-0 items-center gap-1.5 text-left"
         >
           <MapPin className="size-5 text-slate-500" />
           <span className="text-xs leading-tight text-slate-500">
-            Delivering to Dubai
+            {deliveryLabel}
             <br />
             <span className="text-sm font-semibold text-slate-900">
-              Update Location
+              {status === "error" ? "Set location" : "Update Location"}
             </span>
           </span>
         </button>
