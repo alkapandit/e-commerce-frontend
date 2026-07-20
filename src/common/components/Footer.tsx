@@ -200,14 +200,14 @@ const Footer = () => {
                 <img
                   src={upiLogo}
                   alt="UPI"
-                  className="h-6 w-auto object-contain"
+                  className="h-5 w-auto object-contain"
                 />
               </span>
               <span className="flex h-8 items-center rounded-md border border-slate-200 bg-white px-1">
                 <img
                   src={rupayLogo}
                   alt="RuPay"
-                  className="h-6 w-auto object-contain"
+                  className="h-5 w-auto object-contain"
                 />
               </span>
             </div>
