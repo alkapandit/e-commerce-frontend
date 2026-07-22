@@ -6,6 +6,7 @@ import * as Yup from "yup"
 import SocialLoginButtons from "@/common/buttons/SocialLoginButtons"
 import TextField from "@/common/forms/TextField"
 import PasswordField from "@/common/forms/PasswordField"
+import useLogin from "@/auth/hooks/useLogin"
 
 type LoginValues = {
   email: string
@@ -25,6 +26,8 @@ const validationSchema = Yup.object({
 })
 
 const LoginPage = () => {
+  const { mutate: loginUser, isPending } = useLogin()
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-1 text-center">
@@ -39,7 +42,7 @@ const LoginPage = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values) => {
-          console.log(values)
+          loginUser({ identifier: values.email, password: values.password })
         }}
       >
         <Form className="flex flex-col gap-4">
@@ -65,9 +68,10 @@ const LoginPage = () => {
 
           <button
             type="submit"
-            className="h-11 rounded-md bg-slate-900 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
+            disabled={isPending}
+            className="h-11 rounded-md bg-slate-900 text-sm font-semibold text-white transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Sign In
+            {isPending ? "Signing in..." : "Sign In"}
           </button>
         </Form>
       </Formik>
