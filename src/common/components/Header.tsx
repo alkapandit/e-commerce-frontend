@@ -2,9 +2,12 @@ import { MapPin, Search, ShoppingCart, Sparkles, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { useCurrentLocation } from "@/hooks/use-current-location";
+import UserMenu from "@/common/components/UserMenu";
+import useAuthStore from "@/store/useAuthStore";
 
 const Header = () => {
   const { status, locality, detect } = useCurrentLocation();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const deliveryLabel =
     status === "loading"
@@ -73,11 +76,15 @@ const Header = () => {
           <span className="text-sm font-medium text-slate-700">Cart</span>
         </button>
 
-        {/* Sign in */}
-        <Link to="/login" className="flex shrink-0 items-center gap-2">
-          <User className="size-6 text-slate-700" />
-          <span className="text-sm font-medium text-slate-700">Sign In</span>
-        </Link>
+        {/* Sign in / Profile */}
+        {isAuthenticated ? (
+          <UserMenu />
+        ) : (
+          <Link to="/login" className="flex shrink-0 items-center gap-2">
+            <User className="size-6 text-slate-700" />
+            <span className="text-sm font-medium text-slate-700">Sign In</span>
+          </Link>
+        )}
       </div>
     </header>
   );

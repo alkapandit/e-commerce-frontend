@@ -6,6 +6,7 @@ export type LoginPayload = {
 export type AuthUser = {
   email: string
   role: string
+  avatar?: string
 }
 
 export type LoginResponse = {
