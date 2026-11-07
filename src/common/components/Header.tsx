@@ -1,13 +1,30 @@
+import { useState } from "react";
 import { MapPin, Search, ShoppingCart, Sparkles, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useCurrentLocation } from "@/hooks/use-current-location";
 import UserMenu from "@/common/components/UserMenu";
 import useAuthStore from "@/store/useAuthStore";
+import useCart from "@/modules/cart/hooks/useCart";
 
 const Header = () => {
+  const navigate = useNavigate();
   const { status, locality, detect } = useCurrentLocation();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const { data: cart } = useCart();
+  const [searchInput, setSearchInput] = useState("");
+
+  const cartItemCount =
+    cart?.cartItems.reduce((sum, item) => sum + item.quantity, 0) ?? 0
+
+  const handleSearch = (event: React.FormEvent) => {
+    event.preventDefault();
+    navigate(
+      searchInput.trim()
+        ? `/products?search=${encodeURIComponent(searchInput.trim())}`
+        : "/products"
+    );
+  };
 
   const deliveryLabel =
     status === "loading"
@@ -20,8 +37,8 @@ const Header = () => {
     <header className="w-full border-b border-border bg-white">
       <div className="mx-auto flex h-20 max-w-7xl items-center gap-6 px-6">
         {/* Logo */}
-        <a
-          href="/"
+        <Link
+          to="/"
           className="flex shrink-0 items-center gap-1 text-3xl font-bold tracking-tight"
         >
           <span className="text-slate-900">e</span>
@@ -30,24 +47,29 @@ const Header = () => {
             <span className="size-1 rounded-full bg-blue-500" />
           </span>
           <span className="text-slate-900">com</span>
-        </a>
+        </Link>
 
         {/* Search bar */}
-        <div className="flex flex-1 items-center rounded-full bg-slate-100 pr-1 pl-4">
+        <form
+          onSubmit={handleSearch}
+          className="flex flex-1 items-center rounded-full bg-slate-100 pr-1 pl-4"
+        >
           <Sparkles className="size-4 shrink-0 text-blue-500" />
           <input
             type="text"
+            value={searchInput}
+            onChange={(event) => setSearchInput(event.target.value)}
             placeholder="Search for any product or brand"
             className="h-11 w-full bg-transparent px-3 text-sm text-slate-700 placeholder:text-slate-400 outline-none"
           />
           <button
-            type="button"
+            type="submit"
             aria-label="Search"
             className="flex size-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white transition-colors hover:bg-blue-700"
           >
             <Search className="size-4" />
           </button>
-        </div>
+        </form>
 
         {/* Delivery location */}
         <button
@@ -66,15 +88,17 @@ const Header = () => {
         </button>
 
         {/* Cart */}
-        <button type="button" className="flex shrink-0 items-center gap-2">
+        <Link to="/cart" className="flex shrink-0 items-center gap-2">
           <span className="relative">
             <ShoppingCart className="size-6 text-slate-700" />
-            <span className="absolute -top-1.5 -right-1.5 flex size-4 items-center justify-center rounded-full bg-blue-600 text-[10px] font-semibold text-white">
-              2
-            </span>
+            {cartItemCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 flex size-4 items-center justify-center rounded-full bg-blue-600 text-[10px] font-semibold text-white">
+                {cartItemCount}
+              </span>
+            )}
           </span>
           <span className="text-sm font-medium text-slate-700">Cart</span>
-        </button>
+        </Link>
 
         {/* Sign in / Profile */}
         {isAuthenticated ? (

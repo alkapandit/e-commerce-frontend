@@ -1,4 +1,5 @@
 import { ChevronDown, Gift, LayoutGrid } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import {
   DropdownMenu,
@@ -6,19 +7,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-const categories = [
-  "Electronics",
-  "Fashion",
-  "Women's",
-  "Kids' Fashion",
-  "Healthy & Beauty",
-  "Pharmacy",
-  "Groceries",
-  "Luxury Item",
-];
+import useCategories from "@/modules/category/hooks/useCategories";
 
 const CategoryNavBar = () => {
+  const { data: categories } = useCategories();
+
   const scrollToBestDeals = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     document
@@ -37,23 +30,26 @@ const CategoryNavBar = () => {
               <ChevronDown className="size-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-48">
-              {categories.map((category) => (
-                <DropdownMenuItem key={category} render={<a href="#" />}>
-                  {category}
+              {categories?.map((category) => (
+                <DropdownMenuItem
+                  key={category._id}
+                  render={<Link to={`/products?category=${category._id}`} />}
+                >
+                  {category.name}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
           <nav className="hidden items-center gap-5 lg:flex">
-            {categories.map((category) => (
-              <a
-                key={category}
-                href="#"
+            {categories?.slice(0, 8).map((category) => (
+              <Link
+                key={category._id}
+                to={`/products?category=${category._id}`}
                 className="text-sm text-slate-600 transition-colors hover:text-slate-900"
               >
-                {category}
-              </a>
+                {category.name}
+              </Link>
             ))}
           </nav>
         </div>
@@ -67,20 +63,6 @@ const CategoryNavBar = () => {
             <Gift className="size-4" />
             Best Deals
           </a>
-
-          {/* <span className="h-4 w-px bg-slate-200" /> */}
-
-          {/* <a
-            href="#"
-            className="flex items-center gap-1.5 text-sm font-bold text-slate-900"
-          >
-            <span>
-              e<span className="text-blue-500">.</span>mox Live
-            </span>
-            <span className="flex size-4 items-center justify-center rounded-full bg-red-50">
-              <span className="size-2 rounded-full bg-red-500" />
-            </span>
-          </a> */}
         </div>
       </div>
     </div>

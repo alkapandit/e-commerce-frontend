@@ -6,30 +6,44 @@ import * as Yup from "yup"
 import SocialLoginButtons from "@/common/buttons/SocialLoginButtons"
 import TextField from "@/common/forms/TextField"
 import PasswordField from "@/common/forms/PasswordField"
+import useRegister from "@/auth/hooks/useRegister"
+import type { RegisterPayload } from "@/auth/types/auth.types"
 
 type RegisterValues = {
-  fullName: string
+  firstName: string
+  lastName: string
   email: string
+  phone: string
   password: string
+  userType: RegisterPayload["userType"]
 }
 
 const initialValues: RegisterValues = {
-  fullName: "",
+  firstName: "",
+  lastName: "",
   email: "",
+  phone: "",
   password: "",
+  userType: "buyer",
 }
 
 const validationSchema = Yup.object({
-  fullName: Yup.string().required("Full name is required"),
+  firstName: Yup.string().required("First name is required"),
+  lastName: Yup.string().required("Last name is required"),
   email: Yup.string()
     .email("Enter a valid email address")
     .required("Email is required"),
+  phone: Yup.string()
+    .matches(/^[6-9]\d{9}$/, "Enter a valid 10-digit phone number")
+    .required("Phone number is required"),
   password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
+    .min(6, "Password must be at least 6 characters")
     .required("Password is required"),
 })
 
 const RegisterPage = () => {
+  const { mutate: registerUser, isPending } = useRegister()
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-1 text-center">
@@ -43,16 +57,23 @@ const RegisterPage = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values)
-        }}
+        onSubmit={(values) => registerUser(values)}
       >
         <Form className="flex flex-col gap-4">
-          <TextField
-            name="fullName"
-            label="Full Name"
-            placeholder="Your name"
-          />
+          <div className="grid grid-cols-2 gap-3">
+            <TextField
+              boxed
+              name="firstName"
+              label="First Name"
+              placeholder="First name"
+            />
+            <TextField
+              boxed
+              name="lastName"
+              label="Last Name"
+              placeholder="Last name"
+            />
+          </div>
 
           <TextField
             boxed
@@ -62,13 +83,22 @@ const RegisterPage = () => {
             placeholder="your@email.com"
           />
 
+          <TextField
+            boxed
+            name="phone"
+            type="tel"
+            label="Phone Number"
+            placeholder="9876543210"
+          />
+
           <PasswordField name="password" />
 
           <button
             type="submit"
-            className="h-11 rounded-md bg-slate-900 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
+            disabled={isPending}
+            className="h-11 rounded-md bg-slate-900 text-sm font-semibold text-white transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Create Account
+            {isPending ? "Creating account..." : "Create Account"}
           </button>
         </Form>
       </Formik>
